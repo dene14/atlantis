@@ -63,6 +63,7 @@ type UserConfig struct {
 	GithubAppSlug                   string `mapstructure:"gh-app-slug"`
 	GithubAppInstallationID         int64  `mapstructure:"gh-app-installation-id"`
 	GithubTeamAllowlist             string `mapstructure:"gh-team-allowlist"`
+	GithubMaxCommentLength          int    `mapstructure:"gh-max-comment-length"`
 	GiteaBaseURL                    string `mapstructure:"gitea-base-url"`
 	GiteaToken                      string `mapstructure:"gitea-token"`
 	GiteaUser                       string `mapstructure:"gitea-user"`

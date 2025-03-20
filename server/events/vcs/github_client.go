@@ -35,9 +35,9 @@ import (
 	"github.com/shurcooL/githubv4"
 )
 
-// maxCommentLength is the maximum number of chars allowed in a single comment
-// by GitHub.
-const maxCommentLength = 65536
+// Default maximum number of chars allowed in a single comment by GitHub.
+// Default maximum number of chars allowed in a single comment by GitHub.
+const defaultMaxCommentLength = 65536
 
 var (
 	clientMutationID            = githubv4.NewString("atlantis")
@@ -89,6 +89,15 @@ type GithubClient struct {
 	repoIdCache           GitHubRepoIdCache
 }
 
+// getMaxCommentLength returns the maximum comment length configured for GitHub comments.
+// If no value is configured, it returns the default value.
+func (g *GithubClient) getMaxCommentLength() int {
+	if g.config.MaxCommentLength > 0 {
+		return g.config.MaxCommentLength
+	}
+	return defaultMaxCommentLength
+}
+
 // GithubAppTemporarySecrets holds app credentials obtained from github after creation.
 type GithubAppTemporarySecrets struct {
 	// ID is the app id.
@@ -117,7 +126,7 @@ type GithubPRReviewSummary struct {
 }
 
 // NewGithubClient returns a valid GitHub client.
-
+// NewGithubClient returns a valid GitHub client.
 func NewGithubClient(hostname string, credentials GithubCredentials, config GithubConfig, maxCommentsPerCommand int, logger logging.SimpleLogging) (*GithubClient, error) {
 	logger.Debug("Creating new GitHub client for host: %s", hostname)
 	transport, err := credentials.Client()
@@ -249,7 +258,7 @@ func (g *GithubClient) CreateComment(logger logging.SimpleLogging, repo models.R
 		"> **Warning**: Command output is larger than the maximum number of comments per command. Output truncated.\n<details><summary>Show Output</summary>\n\n" +
 		"```diff\n"
 
-	comments := common.SplitComment(comment, maxCommentLength, sepEnd, sepStart, g.maxCommentsPerCommand, truncationHeader)
+	comments := common.SplitComment(comment, g.getMaxCommentLength(), sepEnd, sepStart, g.maxCommentsPerCommand, truncationHeader)
 	for i := range comments {
 		_, resp, err := g.client.Issues.CreateComment(g.ctx, repo.Owner, repo.Name, pullNum, &github.IssueComment{Body: &comments[i]})
 		if resp != nil {

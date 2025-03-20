@@ -673,6 +673,16 @@ based on the organization or user that triggered the webhook.
   Hostname of your GitHub Enterprise installation. If using [GitHub.com](https://github.com),
   don't set. Defaults to `github.com`.
 
+### `--gh-max-comment-length`
+
+  ```bash
+  atlantis server --gh-max-comment-length=32768
+  # or
+  ATLANTIS_GH_MAX_COMMENT_LENGTH=32768
+  ```
+
+  Maximum length of GitHub comments that Atlantis will create. Comments longer than this will be split into multiple comments. Defaults to `65536`.
+
 ### `--gh-org`
 
   ```bash

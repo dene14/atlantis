@@ -102,6 +102,7 @@ const (
 	GHOrganizationFlag               = "gh-org"
 	GHWebhookSecretFlag              = "gh-webhook-secret"               // nolint: gosec
 	GHAllowMergeableBypassApply      = "gh-allow-mergeable-bypass-apply" // nolint: gosec
+	GHMaxCommentLengthFlag           = "gh-max-comment-length"
 	GiteaBaseURLFlag                 = "gitea-base-url"
 	GiteaTokenFlag                   = "gitea-token"
 	GiteaUserFlag                    = "gitea-user"
@@ -666,6 +667,10 @@ var intFlags = map[string]intFlag{
 	RedisPort: {
 		description:  "The Redis Port for when using a Locking DB type of 'redis'.",
 		defaultValue: DefaultRedisPort,
+	},
+	GHMaxCommentLengthFlag: {
+		description:  "Maximum length of GitHub comments. Comments longer than this will be split into multiple comments.",
+		defaultValue: 65536,
 	},
 }
 
